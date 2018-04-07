@@ -1,10 +1,16 @@
 package hr.fer.zemris.avsp.lab1;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
 /**
  * Class with static functions that calculate all kind of stuff
  * @author Mateo Stjepanovic
  *
  */
-public class Calculations {
+public class Utils {
 	
 	public static int[] calculateBitFromHex(String hexArray, int[] values) {
 		int index = 0;
@@ -40,4 +46,41 @@ public class Calculations {
 		return values;
 		
 	}
+	public static int calculateHammingDistance(long[] first, long[] second) {
+		int distance = 0;
+		for(int i = 0; i < first.length;++i) {
+			if(first[i] != second[i]) {
+				distance++;
+			}
+		}
+		return distance;
+	}
+	
+	public static void callQueries(ArrayList<String> queries, ArrayList<long[]> hashes, String output) throws IOException {
+		BufferedWriter writer = new BufferedWriter(new FileWriter(output));
+		
+		for (String querie : queries) {
+			int I = Integer.parseInt(querie.split(" ")[0]);
+			int K = Integer.parseInt(querie.split(" ")[1]);
+			
+			writer.write(String.valueOf(checkQuerie(hashes,I,K)+"\n"));
+		}
+		writer.close();
+	}
+	
+	private static int checkQuerie(ArrayList<long[]> hashes, int I, int K) {
+		int num=0;
+		long[] hash = hashes.get(I);
+		for(int i = 0; i < hashes.size();++i) {
+			if(i != I) {
+				if(calculateHammingDistance(hash, hashes.get(i)) <= K) {
+					num++;
+				}
+			}
+		}
+		
+		return num;
+	}
+	
+	
 }

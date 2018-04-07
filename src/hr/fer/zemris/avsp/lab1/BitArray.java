@@ -18,10 +18,11 @@ public class BitArray {
 		values = new int[size];
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	public int[] getValues() {
 		return values;
 	}
+	
 	public int getValueAtIndex(int index) {
 		if(values.length < index) {
 			System.err.println("Index too big");
@@ -46,7 +47,7 @@ public class BitArray {
 	 */
 	public void CalculateBits(String  hexArray) {
 		
-		Calculations.calculateBitFromHex(hexArray, values);
+		Utils.calculateBitFromHex(hexArray, values);
 	}
 	
 
