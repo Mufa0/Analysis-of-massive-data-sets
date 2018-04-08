@@ -15,6 +15,7 @@ public class SimHash {
 		}
 		
 		String inputFile = args[0];
+//		String inputFile = System.in.toString();
 		String outputFile = args[1];
 		
 		SimHashAlg simhash = new SimHashAlg();
