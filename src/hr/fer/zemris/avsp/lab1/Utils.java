@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
 /**
  * Class with static functions that calculate all kind of stuff
@@ -93,17 +94,57 @@ public class Utils {
 	 * @param output
 	 * @throws IOException
 	 */
-	public static void callQueries(ArrayList<String> queries, ArrayList<long[]> hashes, String output) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new FileWriter(output));
+	public static void callQueries(ArrayList<String> queries, ArrayList<long[]> hashes) throws IOException {
+		
 		
 		for (String querie : queries) {
 			int I = Integer.parseInt(querie.split(" ")[0]);
 			int K = Integer.parseInt(querie.split(" ")[1]);
 			
-			writer.write(String.valueOf(checkQuerie(hashes,I,K)+"\n"));
+			System.out.print(String.valueOf(checkQuerie(hashes,I,K)+"\n"));
 		}
-		writer.close();
+		
 	}
+	/**
+	 * Open writer for output and and go through all queries and check them, returning values store to file.
+	 * @param queries
+	 * @param hashes
+	 * @param output
+	 * @throws IOException
+	 */
+	public static void callQueries(ArrayList<String> queries, ArrayList<long[]> hashes,ArrayList<LinkedHashSet<Integer>> candidates) throws IOException {
+		
+		
+		for (String querie : queries) {
+			int I = Integer.parseInt(querie.split(" ")[0]);
+			int K = Integer.parseInt(querie.split(" ")[1]);
+			
+			System.out.print(String.valueOf(checkQuerie(hashes,I,K,candidates.get(I))+"\n"));
+		}
+		
+	}
+	/**
+	 * Go through all queries and calculate hamming distance from candidates given from LSH algorithm
+	 * @param queries
+	 * @param hashes
+	 * @param output
+	 * @throws IOException
+	 */
+	private static int checkQuerie(ArrayList<long[]> hashes, int I, int K, LinkedHashSet<Integer> candidates) {
+		int num=0;
+		long[] hash = hashes.get(I);
+		ArrayList<Integer> candidatesList = new ArrayList<>(candidates);
+		for(int i = 0; i < candidatesList.size();++i) {
+			if(candidatesList.get(i) != I) {
+				if(calculateHammingDistance(hash, hashes.get(candidatesList.get(i))) <= K) {
+					num++;
+				}
+			}
+		}
+		
+		return num;
+	}
+
 	/**
 	 * For I-th hash in hashes calculate Hamming distance between it and every other hash.
 	 * If distance is LE of K, sum to counter.
