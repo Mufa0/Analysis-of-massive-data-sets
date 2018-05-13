@@ -1,5 +1,7 @@
 package hr.fer.zermis.avsp.lab4;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 /**
@@ -10,8 +12,10 @@ import java.util.ArrayList;
 public class NodeConnections {
 	
 	private int node;
-	private ArrayList<Integer> connections;
-	
+	private ArrayList<Integer> connections = new ArrayList<>();
+	//Number of outgoing connections
+	private int d;
+	private double invertedD;
 	/**
 	 * Constructor cloning input connections to arraylist of connections and having number of specific node
 	 * @param node - node of this specific node
@@ -20,7 +24,9 @@ public class NodeConnections {
 	public NodeConnections(int node, ArrayList<Integer> connections) {
 		
 		this.node = node;
-		this.connections = connections;
+		this.connections = (ArrayList<Integer>) connections.clone();
+		this.d = connections.size();
+		this.invertedD = 1/d;
 	}
 	
 	/**
@@ -38,6 +44,16 @@ public class NodeConnections {
 	 */
 	public int getNode() {
 		return node;
+	}
+	/**
+	 * Getting number of outgoing connections
+	 * @return
+	 */
+	public int getD() {
+		return d;
+	}
+	public double getInvertedD() {
+		return invertedD;
 	}
 	
 	/**
@@ -62,7 +78,9 @@ public class NodeConnections {
 	 * @param node - node that we want to add
 	 */
 	public void addConnection(Integer node) {
+		
 		connections.add(node);
+		this.d++;
 	}
 	
 	/**
@@ -71,6 +89,8 @@ public class NodeConnections {
 	 */
 	public void addConnections(ArrayList<Integer> connections) {
 		this.connections.addAll(connections);
+		this.d = this.connections.size();
+		this.invertedD = 1/d;
 	}
 	
 	/**
@@ -81,6 +101,7 @@ public class NodeConnections {
 		for (String connectingNode : connections.split(" ")) {
 			addConnection(Integer.parseInt(connectingNode));
 		}
+		this.invertedD = 1/d;
 	}
 
 	@Override

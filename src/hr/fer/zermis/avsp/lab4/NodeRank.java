@@ -1,5 +1,7 @@
 package hr.fer.zermis.avsp.lab4;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Scanner;
  /**
@@ -39,6 +41,15 @@ public class NodeRank {
 			queries.add(new Query(input.nextLine()));
 		}
 		
+		
+		NodeRankAlg nra = new NodeRankAlg(beta, n);
+		for (Query query : queries) {
+			
+			ArrayList<Double> rank = (ArrayList<Double>) nra.CalculateRankInT(query.getT(), connections).clone();
+			//System.out.println(BigDecimal.valueOf(rank.get(query.getIndex())).setScale(10,RoundingMode.HALF_UP));
+			System.out.format("%.10f\n", rank.get(query.getIndex()));
+			
+		}
 	}
 
 }
