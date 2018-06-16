@@ -13,8 +13,9 @@ public class NodeConnections {
 	
 	private int node;
 	private ArrayList<Integer> connections = new ArrayList<>();
+	private ArrayList<NodeConnections> ingoing = new ArrayList<>();
 	//Number of outgoing connections
-	private int d;
+	private int d=0;
 	private double invertedD;
 	/**
 	 * Constructor cloning input connections to arraylist of connections and having number of specific node
@@ -37,6 +38,12 @@ public class NodeConnections {
 	public NodeConnections(int node, String connections) {
 		this.node = node;
 		addConnections(connections);
+	}
+	public void addIngoing(NodeConnections connection) {
+		ingoing.add(connection);
+	}
+	public ArrayList<NodeConnections> getIngoing(){
+		return ingoing;
 	}
 	/**
 	 * Getting node index

@@ -8,7 +8,7 @@ public class NodeRankAlg {
 	
 	
 	ArrayList<Double> rank = new ArrayList<>();
-	
+	ArrayList<Double> startRank = new ArrayList<>();
 	double beta;
 	int N;
 	
@@ -21,9 +21,9 @@ public class NodeRankAlg {
 	public NodeRankAlg(double beta , int N) {
 		this.beta = beta;
 		this.N=N;
-		double invertedN = 1/N;
 		for(int i = 0; i < N; ++i) {
-			rank.add((1-beta)/(double)N);
+			rank.add((1.0)/N);
+			startRank.add((1.0-beta)/N);
 		}
 		rankSteps.add(rank);
 	}
@@ -35,12 +35,16 @@ public class NodeRankAlg {
 		if(rankSteps.size() -1 >= T) {
 				return rankSteps.get(T);
 		}else {
-			ArrayList<Double> rankT = (ArrayList<Double>) rankSteps.get(rankSteps.size()-1).clone();
+			ArrayList<Double> rankT = new ArrayList<Double>();
+			rankT.addAll(rankSteps.get(rankSteps.size()-1));
+			
 			for(int i = rankSteps.size(); i <= T; ++i) {
-				rankT = (ArrayList<Double>) CalculateRank(rankT,connections).clone();
+				ArrayList<Double> pom = new ArrayList<>();			
+				pom.addAll(CalculateRank(rankT,connections));
+				rankT.clear();
+				rankT.addAll(pom);
 				rankSteps.add(rankT);
-			}
-				
+			}		
 			return rankT;
 		}
 	
@@ -49,12 +53,12 @@ public class NodeRankAlg {
 	private ArrayList<Double> CalculateRank(ArrayList<Double> rankT, ArrayList<NodeConnections> connections){
 		
 		@SuppressWarnings("unchecked")
-		ArrayList<Double> rankT1 = (ArrayList<Double>) rankSteps.get(0).clone();
+		ArrayList<Double> rankT1 = new ArrayList<>();
+		rankT1.addAll(startRank);
 		for (NodeConnections node : connections) {
 			
 			for(int j = 0; j < node.getD(); ++j) {
-				rankT1.set(node.getConnection(j)
-						, rankT1.get(node.getConnection(j))+beta*(Double)rankT.get(node.getNode())/(double)node.getD());
+				rankT1.set(node.getConnection(j) , rankT1.get(node.getConnection(j))+(beta*rankT.get(node.getNode())/(double)node.getD()));
 			}
 		}
 		return rankT1;
