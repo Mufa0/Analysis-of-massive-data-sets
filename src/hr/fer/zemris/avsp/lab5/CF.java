@@ -21,16 +21,27 @@ public class CF {
 		M = Integer.parseInt(firstLine.split(" ")[1]);
 		
 		UserItemMatrix matrix = new UserItemMatrix();
-		
+				
 		for(int i = 0; i < N; ++i) {
 			matrix.addRow(input.nextLine());
 		}
 		
 		Q = Integer.parseInt(input.nextLine());
+		UserItemMatrix matrixTransNorm = new UserItemMatrix(matrix);
+		matrixTransNorm.transponeMatrix();
+		matrixTransNorm.normalizeMatrix();
 		
+		UserItemMatrix matrixNorm = new UserItemMatrix(matrix);
+		matrixNorm.normalizeMatrix();
+
 		for(int i = 0; i < Q; ++i) {
 			Query q = new Query(input.nextLine());
-			q.getOutput(matrix);
+			if(q.getT()==0) {
+				q.getOutput(matrix,matrixNorm);
+			}else {
+				q.getOutput(matrix,matrixTransNorm);
+			}
+			
 		}
 	}
 

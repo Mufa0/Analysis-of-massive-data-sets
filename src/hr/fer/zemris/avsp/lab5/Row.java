@@ -37,7 +37,9 @@ public class Row {
 	public void setRow(ArrayList<String> row) {
 		this.row = row;
 	}
-	
+	public void addColumnt(String element) {
+		this.row.add(element);
+	}
 	public String getColumn(int index) {
 		errorPrint(index, row.size(), errorMessage+index);
 		return row.get(index);	
@@ -55,24 +57,25 @@ public class Row {
 		}
 	}
 	public void normalizeRow() {
-		float mean = rowMean();
+		double mean = rowMean();
 		for(int i = 0; i< row.size();++i) {
 			if(row.get(i).equals("X")) {
-				updateColumn(i, "0");
+				updateColumn(i, "0.0");
 			}else {
 				updateColumn(i,String.valueOf(Double.parseDouble(row.get(i)) - mean));
 			}
 		}
 	}
-	public float rowMean() {
-		int sum = 0;
+	public double rowMean() {
+		double sum = 0;
+		gradeCount=0;
 		for (String column : row) {
 			if(!column.equals("X")) {
 				gradeCount++;
 				sum+= Double.parseDouble(column);
 			}
 		}
-		return (float)sum/gradeCount;
+		return (double)sum/gradeCount;
 	}
 	
 }

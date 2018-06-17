@@ -64,4 +64,16 @@ public class UserItemMatrix {
 			stringMatrix.get(i).normalizeRow();
 		}
 	}
+	public void transponeMatrix() {
+		UserItemMatrix pom = new UserItemMatrix(this.stringMatrix);
+		stringMatrix.clear();
+		for(int i = 0; i < pom.getRow(0).getRow().size();++i) {
+			Row r = new Row();
+			for(int j = 0; j < pom.getStringMatrix().size();++j) {
+				r.addColumnt(pom.getColumn(j, i));
+	
+			}
+			stringMatrix.add(r);
+		}
+	}
 }
